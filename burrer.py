@@ -1,13 +1,5 @@
 from PIL import Image
-import time
-
-fromer = input('URL : ')
-toer = input('Name : ')
-lvl = int(input('Level : '))
-older_img = Image.open(fromer)
-(old_width, old_height) = older_img.size
-new_img = Image.new('RGB', (old_width, old_height), (0, 0, 0))
-new_img.save(toer)
+import time, math
 
 def lb_modify_img(old, new):
     before = time.time()
@@ -22,4 +14,19 @@ def lb_modify_img(old, new):
         new = Image.new('RGB', (old_width, old_height), (0, 0, 0))
     old.close()
     new.close()
-lb_modify_img(older_img, new_img)
+    return lb_sec_to_min(time.time() - before)
+def lb_copy_path(path):
+    spliter = path.split('.')
+    return spliter[0] + '_blurred.' + spliter[1]
+def lb_sec_to_min(sec):
+    return [math.floor(sec // 60), math.floor(sec / 60 % 1 * 60), math.floor(sec % 1 * 1000)]
+
+fromer = input('\033[1;32mURL : \033[1;35m')
+toer = lb_copy_path(fromer)
+lvl = int(input('\033[1;32mLevel : \033[1;35m'))
+older_img = Image.open(fromer)
+(old_width, old_height) = older_img.size
+new_img = Image.new('RGB', (old_width, old_height), (0, 0, 0))
+new_img.save(toer)
+timing = lb_modify_img(older_img, new_img)
+print(f'\033[1;33mFinished in {timing[0]}min {timing[1]}sec {timing[2]}ms\033[0m')
